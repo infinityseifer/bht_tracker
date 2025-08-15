@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>View Submissions</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    .filter-panel {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
+
+    .filter-panel label {
+      display: flex;
+      flex-direction: column;
+      font-weight: bold;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th, td {
+      padding: 10px;
+      border: 1px solid #ccc;
+      text-align: left;
+    }
+
+    #detailView {
+      margin-top: 30px;
+      padding: 10px;
+      border: 1px solid #aaa;
+      background-color: #f9f9f9;
+    }
+
+    #applyFilters {
+      padding: 8px 16px;
+      font-size: 14px;
+      margin-top: 22px;
+    }
+    .form-toggle {
+  margin-bottom: 16px;
+  }
+
+  .form-toggle button {
+    padding: 10px 16px;
+    margin-right: 8px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background-color: #f1f1f1;
+    cursor: pointer;
+  }
+
+  .form-toggle button.active {
+    background-color: #0066cc;
+    color: white;
+    border-color: #0066cc;
+  }
+
+
+
+  </style>
+</head>
+<body>
+  <div class="form-toggle">
+    <button id="btnDrForm" class="active">Discipline Referral</button>
+    <button id="btnBhtForm">BHT Referral</button>
+  </div>
+
+  <div class="container">
+    <h1>Review Submissions</h1>
+
+    <div class="filter-panel">
+      <label>Grade:
+        <select id="filterGrade">
+          <option value="">All</option>
+          <option>K</option><option>1</option><option>2</option>
+          <option>3</option><option>4</option><option>5</option>
+          <option>6</option><option>7</option><option>8</option>
+        </select>
+      </label>
+
+      <label>Date:
+        <input type="date" id="filterStartDate"> to 
+        <input type="date" id="filterEndDate">
+      </label>
+
+      <label>Student Name:
+        <input type="text" id="filterStudentName" placeholder="e.g. John Smith" />
+      </label>
+
+      <button id="applyFilters">Search</button>
+    </div>
+
+    <table id="resultsTable">
+      <thead>
+        <tr>
+          <th>Date</th>
+          <th>Student</th>
+          <th>Grade</th>
+          <th>Teacher</th>
+          <th>Minor Behavior</th>
+          <th>Major Behavior</th>
+        </tr>
+      </thead>
+      <tbody></tbody>
+    </table>
+
+    <div id="detailView" style="display:none;">
+      <h3>Form Details</h3>
+      <pre id="detailContent" style="white-space: pre-wrap;"></pre>
+    </div>
+  </div>
+
+  <script src="view-submission.js"></script>
+</body>
+</html>
