@@ -222,3 +222,86 @@ form textarea {
     grid-template-columns: 1fr;
   }
 }
+
+.btn-admin{
+  display:inline-block;
+  padding:12px 16px;
+  border-radius:8px;
+  background:#0066cc;
+  color:#fff;
+  text-decoration:none;
+  border:1px solid #2b5ea8;
+  font-weight:600;
+}
+.btn-admin:hover{ background:#004d99; }
+/* Page background + centering like your forms */
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: #f2f2f2;
+}
+
+/* Page container */
+.container {
+  max-width: 960px;
+  margin: 40px auto;
+  padding: 0 16px;
+}
+
+/* Cards for sections */
+.card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.08);
+  padding: 24px;
+  margin-bottom: 20px;
+}
+
+/* Headings */
+h1 {
+  text-align: center;
+  margin: 0 0 20px;
+}
+h2 {
+  margin: 0 0 16px;
+  color: #004080;
+  font-size: 20px;
+}
+
+/* Buttons – same vibe as your forms */
+button, .btn {
+  background: #0066cc;
+  color: #fff;
+  border: 0;
+  border-radius: 8px;
+  padding: 10px 14px;
+  font-size: 15px;
+  cursor: pointer;
+}
+button:hover, .btn:hover {
+  background: #004d99;
+}
+
+/* Row of actions */
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* Optional iframe embed wrapper */
+.embed {
+  margin-top: 16px;
+}
+
+/* EDA output box */
+#edaOutput {
+  background: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 12px;
+  white-space: pre-wrap;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 13px;
+}
