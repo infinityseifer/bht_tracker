@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <!-- Choices.js CSS -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css" />
+
+  <style>
+  /* Make the body use Flexbox to center */
+  body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f2f2f2;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+  }
+
+  /* Form wrapper for centered layout */
+  .form-wrapper {
+    background-color: #fff;
+    padding: 30px 40px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 800px;
+  }
+
+  .form-summary {
+    text-align: center;
+   
+  }
+
+  h1 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  label {
+    font-weight: bold;
+    margin-top: 15px;
+    display: block;
+  }
+
+  input,
+  select,
+  textarea {
+    width: 100%;
+    padding: 10px;
+    margin-top: 4px;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    font-size: 15px;
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 100px;
+  }
+
+  button {
+    width: 100%;
+    background-color: #0066cc;
+    color: white;
+    border: none;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+  }
+
+  button:hover {
+    background-color: #004d99;
+  }
+
+  small {
+    font-size: 10px;
+    color: #666;
+  }
+
+  .checkbox-group {
+  margin-bottom: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: left;
+}
+
+.checkbox-group label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+
+.checkbox-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(300px, 1fr));
+  gap: 10px 20px;
+  margin-bottom: 16px;
+  text-align: left;
+}
+
+.checkbox-columns label {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+/* Checkbox input: small fixed width */
+.checkbox-columns input[type="checkbox"] {
+  flex: 0 0 20px; /* Do not grow or shrink, stay ~20px wide */
+  margin-top: 2px;
+}
+
+/* Label text: take the remaining space */
+.checkbox-columns span {
+  flex: 1;              /* Grow to fill remaining space */
+  display: inline-block;
+  white-space: normal;
+  word-break: break-word;
+}
+
+#previewSection {
+  border: 1px solid #ccc;
+  padding: 24px;
+  margin-top: 24px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+}
+
+#previewSection h3 {
+  margin-top: 0;
+  font-size: 20px;
+  color: #333;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 8px;
+  margin-bottom: 16px;
+}
+
+#previewSection ul {
+  list-style: none;
+  padding-left: 0;
+  margin-bottom: 16px;
+}
+
+#previewSection li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  margin-bottom: 12px;
+}
+
+#previewSection strong {
+  width: 200px;            /* Keep this fixed */
+  min-width: 200px;
+  font-weight: bold;
+  color: #004080;
+}
+
+#previewSection li span {
+  flex: 1;
+}
+
+.preview-buttons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+
+.preview-buttons button {
+  flex: none;
+}
+
+
+
+</style>
+
+
+
+  <meta charset="UTF-8" />
+  <title>BHT Referral Form</title>
+</head>
+  <body>
+    <div class="form-wrapper">
+
+        <div class="form-summary">
+            <h2>BHT Referral Summary</h2>
+            <p>This from is to be completed if you are looking for additional support with a student 
+                displaying social, emotional, and/or behavioral concerns.
+            After submission, a meeting will be scheduled with your School Base Team
+                or Behavioral Health Team (BHT) to review the information provided, discuss 
+                recommendations, and develop an action plan for support
+            </p>
+        
+        </div><br>
+
+
+      <h1>BHT Referral Form</h1>
+
+      <form id="BhtForm">
+      <label>Role of the person requesting</label><br>
+      <select id="Role" name="Role" required>
+        <option value="">Select...</option>
+        <option>Teacher</option>
+        <option>Case Manager</option>
+        <option>Counselor</option>
+        <option>Administrator</option>
+        <option>Parent</option>
+        <option>Social Worker</option>
+        <option>Psychologist</option>
+        <option>Speech Pathologist</option>
+        <option>Occupational Therapist</option>
+        <option>Network Social Emotional Learning Specialist(NSEL)</option>
+        <option>Diverse Learner Administrator</option>
+
+      </select><br><br>
+
+      <label>Student initials (First 2 letters of first name and first 
+        2 letters of last name.  ex. John Smith is JOSM)</label><br>
+      <input id="StudentInitial" name="StudentInitial" required /><br><br>
+
+      <label>StudentID</label><br>
+      <input id="StudentID" name ="StudentID" type="number"required><br><br>
+
+      <label>Student is...</label><br>
+      <select id="StudentStatus" name="StudentStatus">
+        <option value="">Select...</option>
+        <option>GenED</option>
+        <option>IEP</option>
+        <option>504</option>
+
+      </select><br><br>
+        
+    
+      <label>Classroom Teacher/Point of Contact(Last,First)</label><br>
+      <input id="TeacherName" name="TeacherName" /><br><br>
+
+      <label>Classroom Teacher/Point of Contact(Email)</label><br>
+      <input id="TeacherEmail" name="TeacherEmail"><br><br>
+        
+      
+      <label>Have the parent(s)/gaurdian(s) been notified of the schools 
+        concerns and that additional support is being sought?
+      </label><br>
+      <select id="ParentNotified" name="ParentNotified">
+        <option value="">Select...</option>
+        <option>Yes</option>
+        <option>No</option>
+        
+      </select><br><br>
+
+
+      <label>What is the main concern regarding this student?  Please
+        select one area that is the main concern.  Addtional areas of concern 
+        may be marked in the next question.
+      </label><br>
+      <select id="MainConcern" name="MainConcern">
+        <option value="">Select...</option>
+        <option>Poor relationships w/ peers and/or adults</option>
+        <option>Aggression (verbal and/or physical)</option>
+        <option>Non-Compliance</option>
+        <option>Sadness/Anxiety/Withdrawal/Grief</option>
+        <option>Substance use/abuse</option>
+        <option>Inattention/Hyperactivity</option>
+        <option>Poor attendance</option>
+        <option>Student reveal personal concern</option>
+
+      </select><br><br>
+      
+
+      <label>Addidtional Concerns</label><br>
+      <select id="AdditionalConcern" name="AdditionalConcern">
+        <option value="">Select...</option>
+        <option>Poor relationships w/ peers and/or adults</option>
+        <option>Aggression (verbal and/or physical)</option>
+        <option>Non-Compliance</option>
+        <option>Sadness/Anxiety/Withdrawal/Grief</option>
+        <option>Substance use/abuse</option>
+        <option>Inattention/Hyperactivity</option>
+        <option>Poor attendance</option>
+        <option>Student reveal personal concern</option>
+      
+      </select><br><br>
+
+      <label for="Observation">Provide an observable and measurable discription
+        of the behavior(s) of concern (what, when, where, with whom,
+        duration, how othen, etc...) (max 5000 characters):</label><br>
+      <textarea id="Observation" name="Observation" row="10" maxlength="5000" placeholder="Describe the observed behavior"></textarea>
+      <small id="ObservationCounter">0 / 5000</small><br /><br />
+
+      
+
+      <label>Student strength. Check all that apply</label><br>
+      <div class="checkbox-columns">
+        <label><input type="checkbox" name="StudentStrength" value="Positive Family Support"><span>Positive parent/family support</span></label><br>
+        <label><input type="checkbox" name="StudentStrength" value="Athletics">Athletics</label><br>
+        <label><input type="checkbox" name="StudentStrength" value="Art">Art</label><br>
+        <label><input type="checkbox" name="StudentStrength" value="Connection to Adults">Connection to Adults</label><br>
+        <label><input type="checkbox" name="StudentStrength" value="Reading">Reading</label><br>
+        <label><input type="checkbox" name="StudentStrength" value="Science">Science</label><br>
+        <label><input type="checkbox" name="StudentStrength" value="Peer Relationships">Peer Relationships</label><br>
+
+      </div>
+      
+     
+
+      <label>What Tier I interventions are currently in place for 
+        the student? Please, check all that apply </label><br>
+      <div class="checkbox-columns">
+        <label><input type="checkbox" name="TierOne" value="Reinforcement system">Reinforcement system</label><br>
+        <label><input type="checkbox" name="TierOne" value="Restorative conversations">Restorative conversations</label><br>
+        <label><input type="checkbox" name="TierOne" value="Differentiated instruction, flexible grouping, cooperative 
+          learning, scaffolding">Differentiated instruction, flexible grouping, cooperative learning, scaffolding</label><br>
+        <label><input type="checkbox" name="TierOne" value="Increase positive attention, specific praise">Increase 
+          positive attention, specific praise</label><br>
+        <label><input type="checkbox" name="TierOne" value="Classroom-wide peer assisted learning">Classroom-wide peer assisted learning</label><br>
+        <label><input type="checkbox" name="TierOne" value="School/class mentoring program">School/class mentoring program</label><br>
+        <label><input type="checkbox" name="TierOne" value="Strategic seating arrangement based on student needs">Strategic seating arrangement based on student needs</label><br>
+        <label><input type="checkbox" name="TierOne" value="Verbal/nonverbal cues and signals/prompts/redirection">Verbal/nonverbal cues and signals/prompts/redirection</label><br>
+        <label><input type="checkbox" name="TierOne" value="Variety of modes available for learning(standing at desk, work in a preferred area, type assignments,
+           etc…)">Variety of modes available for learning(standing at desk, work in a preferred area, type assignments, etc…)</label><br>
+        <label><input type="checkbox" name="TierOne" value="Behavior reflection">Behavior reflection</label><br>
+        <label><input type="checkbox" name="TierOne" value="Time out/take a break, movement opportunities">Time out/take a break, movement opportunities</label><br>
+        <label><input type="checkbox" name="TierOne" value="Clear concise directions/limiting use of excessive language">Clear concise directions/limiting use of excessive language</label><br>
+        <label><input type="checkbox" name="TierOne" value="Increased wait time">Increased wait time</label><br>
+        <label><input type="checkbox" name="TierOne" value="Visual aids, highlighted texts and materials (graphic organizers, checklist, timers, etc..
+          ">Visual aids, highlighted texts and materials (graphic organizers, checklist, timers, etc..)</label><br>
+        <label><input type="checkbox" name="TierOne" value="None">None</label><br>
+       
+      </div>
+
+
+
+      <label>What Tier II interventions are currently in place and/or
+         have been attempted for the student? Please, check all that apply </label><br>
+      <div class="checkbox-columns">
+        <label><input type="checkbox" name="TierTwo" value="Check in/Check out">Check in/Check out</label><br>
+        <label><input type="checkbox" name="TierTwo" value="Anger coping/Think first">Anger coping/Think first</label><br>
+        <label><input type="checkbox" name="TierTwo" value="CBITS">CBITS</label><br>
+        <label><input type="checkbox" name="TierTwo" value="SS GRIN">SS GRIN</label><br>
+        <label><input type="checkbox" name="TierTwo" value="Peer Conference">Peer Conference</label><br>
+        <label><input type="checkbox" name="TierTwo" value="Peace Circle">Peace Circle</label><br>
+        <label><input type="checkbox" name="TierTwo" value="SPARCS">SPARCS</label><br>
+        <label><input type="checkbox" name="TierTwo" value="Bounce Back">Bounce Back</label><br>
+        <label><input type="checkbox" name="TierTwo" value="BAM/WOW">BAM/WOW</label><br>
+        <label><input type="checkbox" name="TierTwo" value="Modification of task">Modification of task</label><br>
+        <label><input type="checkbox" name="TierTwo" value="Chunking information and/or tasks">Chunking information and/or tasks</label><br>
+        <label><input type="checkbox" name="TierTwo" value="Tutoring">Tutoring</label><br>
+        <label><input type="checkbox" name="TierTwo" value="Re-teach and practice of skills in small group">Re-teach and practice of skills in small group</label><br>
+        <label><input type="checkbox" name="TierTwo" value="Structured breaks">Structured breaks</label><br>
+        <label><input type="checkbox" name="TierTwo" value="Support in organizing materials and learning accommodations">Support in organizing materials and learning accommodations</label><br>
+        <label><input type="checkbox" name="TierTwo" value="Visual and/or individual schedules">Visual and/or individual schedules</label><br>
+        <label><input type="checkbox" name="TierTwo" value="Self monitoring/management strategies">Self monitoring/management strategies</label><br>
+        <label><input type="checkbox" name="TierTwo" value="Pre-teaching concepts">Pre-teaching concepts</label><br>
+        <label><input type="checkbox" name="TierTwo" value="-Extended time">-Extended time</label><br>
+        <label><input type="checkbox" name="TierTwo" value="Individualized structured reinforcement system">Individualized structured reinforcement system</label><br>
+        <label><input type="checkbox" name="TierTwo" value="Behavior contract">Behavior contract</label><br>
+        <label><input type="checkbox" name="TierTwo" value="Choice of task sequence">Choice of task sequence</label><br>
+        <label><input type="checkbox" name="TierTwo" value="None">None</label><br>
+        <label><input type="checkbox" name="TierTwo" value="Not sure">Not sure</label><br>
+        
+
+      </div>
+
+      <label>What Tier III interventions are currently in place and/or have 
+        been attempted for the student? Please, check all that apply</label><br>
+      <div class="checkbox-columns">
+        <label><input type="checkbox" name="TierThree" value="Functional Behavior Assessment(FBA) and Behavior Intervention Plan(BIP)
+          (SPED only)">Functional Behavior Assessment(FBA) and Behavior Intervention Plan(BIP)(SPED only)</label><br>
+        <label><input type="checkbox" name="TierThree" value="Tier III Behavior Support Plan(GenED only)">Tier III Behavior Support Plan(GenED only)</label><br>
+        <label><input type="checkbox" name="TierThree" value="Community agency referral">Community agency referral</label><br>
+        <label><input type="checkbox" name="TierThree" value="Gang affiliation group">Gang affiliation group</label><br>
+        <label><input type="checkbox" name="TierThree" value="Substance abuse group">Substance abuse group</label><br>
+        <label><input type="checkbox" name="TierThree" value="Conflict resolution group">Conflict resolution group</label><br>
+        <label><input type="checkbox" name="TierThree" value="Wraparound mentoring">Wraparound mentoring</label><br>
+        <label><input type="checkbox" name="TierThree" value="Individual counseling">Individual counseling</label><br>
+        <label><input type="checkbox" name="TierThree" value="One on One tutoring/skill building">One on One tutoring/skill building</label><br>
+        <label><input type="checkbox" name="TierThree" value="Other small group intervention">Other small group intervention</label><br>
+        <label><input type="checkbox" name="TierThree" value="None">None</label><br>
+        <label><input type="checkbox" name="TierThree" value="Not sure">Not sure</label><br>
+       
+      </div>
+
+      <label>If a FBA and BIP(SPED Student) OR Tier III Behavior Support Plan(GenEd Student) are in place,
+         was it developed during the current school year?</label><br>
+      <select id="FBA" name="FBA">
+        <option value="">Select...</option>
+        <option>Yes: New assessment conducted</option>
+        <option>Yes: Revised existing plan</option>
+        <option>No</option>
+      
+      </select><br><br>
+
+      <label>Do you have data on the behavior of concern and interventions 
+        implemented(i.e., frequency, duration)? If yes, please be prepared 
+        to provide the current data on the behavior(s) and interventions.</label><br>
+      <select id="BehaviorData" name="BehaviorData">
+        <option value="">Select...</option>
+        <option>Yes</option>
+        <option>No</option>
+      
+      </select><br><br>
+
+      <label>What time of day is the behavior more likely to occur?</label><br>
+      <select id="BehaviorTime" name="BehaviorTime">
+        <option value="">Select...</option>
+        <option>Before School</option>
+        <option>Morning</option>
+        <option>Midday</option>
+        <option>Afternoon</option>
+        <option>Afterschool</option>
+      
+      </select><br><br>
+
+      <label>During which subjects is the behavior more likely to occur during?</label><br>
+      <select id="BehaviorSubject" name="BehaviorSubject">
+        <option value="">Select...</option>
+        <option>Breakfast</option>
+        <option>Morning Meeting/Circle</option>
+        <option>Reading</option>
+        <option>Math</option>
+        <option>Science</option>
+        <option>Social Studies</option>
+        <option>Art</option>
+        <option>Language Prep</option>
+        <option>P.E.</option>
+        <option>Lunch/Recess</option>
+        <option>Independent Work</option>
+        <option>Small Group Work</option>
+        <option>Large Group Work</option>
+      
+      </select><br><br>
+      
+      
+
+    </form>
+
+    <div class="preview-buttons">
+      <button type="button" id="previewBtn">Preview Before Submit</button>
+    </div>
+
+    <!--Preview Section before submission-->
+    <div id="previewSection" style="display: none; margin-top: 20px;">
+      <h3>Preview Submission</h3>
+      <pre id="previewContent" style="white-space: pre-wrap;"></pre>
+
+    <div class="preview-buttons">
+
+      <button id="confirmSubmitBtn">Confirm & Submit</button>
+      <button id="savePdfBtn">Save Preview as PDF</button>
+  </div>
+</div>
+
+    <p id="statusMessage"></p>
+
+
+  </div>
+  
+
+  <script src="BhtForm.js"></script>
+
+  <script src="form-enhance.js"></script>
+
+
+  <!-- Choices.js JS -->
+  <script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
+  
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+</body>
+</html>
