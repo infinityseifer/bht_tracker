@@ -1,63 +1,90 @@
-// Live character count for Narrative
-document.getElementById("Narrative").addEventListener("input", function () {
-  const counter = document.getElementById("narrativeCounter");
-  counter.textContent = `${this.value.length} / 2500`;
-});
+// DrForm.js (mirrors BHT flow)
+document.addEventListener('DOMContentLoaded', () => {
+  const form           = document.getElementById('DrForm');
+  const iframe         = document.getElementsByName('dr_hidden_iframe')[0];
+  const previewBtn     = document.getElementById('previewBtn');
+  const confirmBtn     = document.getElementById('confirmSubmitBtn');
+  const resetBtn       = document.getElementById('resetBtn');
+  const savePdfBtn     = document.getElementById('savePdfBtn');
+  const previewSection = document.getElementById('previewSection');
+  const previewContent = document.getElementById('previewContent');
 
-// PREVIEW before submit
-document.getElementById("previewBtn").addEventListener("click", function () {
-  const form = document.getElementById("DrForm");
-  const formData = new FormData(form);
-  const data = Object.fromEntries(formData.entries());  // ✅ Correctly use one FormData
-
-  // Format datetime
-  if (data.DateTime) {
-    data.DateTime = new Date(data.DateTime).toISOString();
-  }
-
-  // Show preview
-  const previewSection = document.getElementById("previewSection");
-  const previewContent = document.getElementById("previewContent");
-
-  let previewHTML = "<ul style='list-style:none; padding-left:0'>";
-  for (const [key, value] of Object.entries(data)) {
-    const formattedKey = key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
-    previewHTML += `<li><strong>${formattedKey}:</strong> ${Array.isArray(value) ? value.join(', ') : value}</li>`;
-  }
-  previewHTML += "</ul>";
-
-  previewContent.innerHTML = previewHTML;
-  previewSection.style.display = "block";
-
-  // Store for confirmed submit
-  window.previewFormData = data;
-});
-
-// FINAL submit to Google Sheets
-document.getElementById("confirmSubmitBtn").addEventListener("click", async function () {
-  const data = window.previewFormData;
-
-  try {
-    const response = await fetch("https://script.google.com/macros/s/AKfycby2e-sbxaq9uYTLEh2L8GNVCRvJJAvE3lGWrqDxZbSOIsYgzpJf087H6UZ93zoKUSoc/exec", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
+  // Narrative counter
+  const narrative = document.getElementById('Narrative');
+  const counter   = document.getElementById('narrativeCounter');
+  if (narrative && counter) {
+    narrative.addEventListener('input', () => {
+      counter.textContent = `${narrative.value.length} / 2500`;
     });
-
-    const resultText = await response.text();
-    console.log("Response from Google Sheets:", resultText);
-    alert("Form submitted successfully!");
-
-    document.getElementById("DrForm").reset();
-    document.getElementById("previewSection").style.display = "none";
-  } catch (err) {
-    console.error("Submit error:", err);
-    alert("There was an error submitting the form.");
   }
-});
 
-// Reset form and hide preview
-document.getElementById("resetBtn").addEventListener("click", function () {
-  document.getElementById("DrForm").reset();
-  document.getElementById("previewSection").style.display = "none";
+  // Preview
+  if (previewBtn) {
+    previewBtn.addEventListener('click', () => {
+      const data = Object.fromEntries(new FormData(form).entries());
+
+      // Optional: nicer datetime in preview (doesn't affect submission)
+      const display = { ...data };
+      if (display.DateTime) {
+        try { display.DateTime = new Date(display.DateTime).toISOString(); } catch {}
+      }
+
+      let html = "<ul style='list-style:none;padding-left:0'>";
+      for (const [k, v] of Object.entries(display)) {
+        const key = k.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase());
+        html += `<li><strong>${key}:</strong> ${Array.isArray(v) ? v.join(', ') : v}</li>`;
+      }
+      html += "</ul>";
+
+      previewContent.innerHTML = html;
+      previewSection.style.display = 'block';
+    });
+  }
+
+  // Submit to GAS via hidden iframe
+  let isSubmitting = false;
+  if (confirmBtn) {
+    confirmBtn.addEventListener('click', () => {
+      isSubmitting = true;
+      form.submit(); // posts to Apps Script /exec
+    });
+  }
+
+  // Success callback when iframe loads
+  if (iframe) {
+    iframe.addEventListener('load', () => {
+      if (!isSubmitting) return;
+      isSubmitting = false;
+      alert('Form submitted to Google Sheets!');
+      form.reset();
+      previewSection.style.display = 'none';
+    });
+  }
+
+  // Reset
+  if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+      form.reset();
+      previewSection.style.display = 'none';
+    });
+  }
+
+  // Save Preview as PDF
+  if (savePdfBtn) {
+    savePdfBtn.addEventListener('click', async () => {
+      if (!previewSection || previewSection.style.display === 'none') {
+        alert('Preview must be visible to save as PDF.');
+        return;
+      }
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'a4' });
+      const canvas = await html2canvas(previewSection);
+      const img = canvas.toDataURL('image/png');
+      const props = pdf.getImageProperties(img);
+      const w = pdf.internal.pageSize.getWidth();
+      const h = (props.height * w) / props.width;
+      pdf.addImage(img, 'PNG', 20, 20, w - 40, h);
+      pdf.save('dr-preview.pdf');
+    });
+  }
 });

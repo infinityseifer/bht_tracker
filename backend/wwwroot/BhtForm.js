@@ -1,128 +1,122 @@
-// OPTIONAL: Add character count for Observation
-const observationField = document.getElementById("Observation");
-if (observationField) {
-  observationField.addEventListener("input", function () {
-    const counter = document.getElementById("ObservationCounter");
-    counter.textContent = `${this.value.length} / 5000`;
-  });
-}
+document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('BhtForm');
+  if (!form) return; // safety if script loads before DOM
 
-// Handle PREVIEW
-document.getElementById("previewBtn").addEventListener("click", function () {
-  const form = document.getElementById("BhtForm");
-  const formData = new FormData(form);
-  const data = Object.fromEntries(formData.entries());
+  const previewBtn     = document.getElementById('previewBtn');
+  const confirmBtn     = document.getElementById('confirmSubmitBtn');
+  const resetBtn       = document.getElementById('resetBtn');
+  const previewSection = document.getElementById('previewSection');
+  const previewContent = document.getElementById('previewContent');
+  const iframe         = document.getElementsByName('bht_hidden_iframe')[0];
 
-  // Convert StudentID to number
-  if (data.StudentID) {
-    data.StudentID = parseInt(data.StudentID);
+  // Character counter
+  const observationField = document.getElementById('Observation');
+  const observationCounter = document.getElementById('ObservationCounter');
+  if (observationField && observationCounter) {
+    observationCounter.textContent = '0 / 5000';
+    observationField.addEventListener('input', () => {
+      observationCounter.textContent = `${observationField.value.length} / 5000`;
+    });
   }
 
-  // Collect checkbox lists
-  data.TierOne = Array.from(document.querySelectorAll('input[name="TierOne"]:checked')).map(cb => cb.value);
-  data.TierTwo = Array.from(document.querySelectorAll('input[name="TierTwo"]:checked')).map(cb => cb.value);
-  data.TierThree = Array.from(document.querySelectorAll('input[name="TierThree"]:checked')).map(cb => cb.value);
-  data.StudentStrength = Array.from(document.querySelectorAll('input[name="StudentStrength"]:checked')).map(cb => cb.value);
+  // PREVIEW
+  if (previewBtn && previewSection && previewContent) {
+    previewBtn.addEventListener('click', () => {
+      const data = Object.fromEntries(new FormData(form));
 
-  // Log to debug structure
-  console.log("Previewed Payload:", JSON.stringify(data, null, 2));
+      // Collect checkbox groups (for preview only)
+      const collect = name =>
+        Array.from(document.querySelectorAll(`input[name="${name}"]:checked`))
+          .map(x => x.value);
 
-  // Format preview HTML
-  const previewSection = document.getElementById("previewSection");
-  const previewContent = document.getElementById("previewContent");
+      data.StudentStrength = collect('StudentStrength');
+      data.TierOne         = collect('TierOne');
+      data.TierTwo         = collect('TierTwo');
+      data.TierThree       = collect('TierThree');
 
-  let previewHTML = "<ul style='list-style:none; padding-left:0'>";
-  for (const [key, value] of Object.entries(data)) {
-    const formattedKey = key.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase());
-    const displayValue = Array.isArray(value)
-      ? value.map(v => v.replace(/\s+/g, ' ').trim()).join(', ')
-      : value;
+      // Render preview
+      let html = "<ul style='list-style:none;padding-left:0;margin:0'>";
+      for (const [k, v] of Object.entries(data)) {
+        const key = k.replace(/([A-Z])/g, ' $1').replace(/^./, s => s.toUpperCase());
+        html += `<li style="margin:8px 0"><strong>${key}:</strong> <span>${
+          Array.isArray(v) ? v.join(', ') : (v ?? '')
+        }</span></li>`;
+      }
+      html += '</ul>';
 
-    previewHTML += `<li><strong>${formattedKey}:</strong><span>${displayValue}</span></li>`;
-  }
-  previewHTML += "</ul>";
-
-  previewContent.innerHTML = previewHTML;
-  previewSection.style.display = "block";
-
-  // Store for submission
-  window.previewFormData = data;
-});
-
-// Handle CONFIRM & SUBMIT
-document.getElementById("confirmSubmitBtn").addEventListener("click", async function () {
-  const data = window.previewFormData;
-
-console.log("Final submission payload:", JSON.stringify(data, null, 2));
-
-const requiredFields = [
-  "Role", "StudentInitial", "StudentID", "StudentStatus", "TeacherName", "TeacherEmail",
-  "ParentNotified", "MainConcern", "AdditionalConcern", "Observation",
-  "FBA", "BehaviorData", "BehaviorTime", "BehaviorSubject"
-];
-
-for (const field of requiredFields) {
-  if (!data[field]) {
-    alert(`Missing required field: ${field}`);
-    return;
-  }
-}
-
-console.log("👉 Submitting payload:", JSON.stringify(data, null, 2));
-  // Validate required fields
-  for (const field of requiredFields) {
-    if (!data[field]) {
-      alert(`Missing required field: ${field}`);
-      return;
-    }
+      previewContent.innerHTML = html;
+      previewSection.style.display = 'block';
+      window.previewFormData = data; // optional stash
+    });
   }
 
-  try {
-    const response = await fetch("https://bht-tracker-service-660996580909.us-central1.run.app/api/BhtForm", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
-  });
+  // CONFIRM & SUBMIT (native POST to Apps Script via hidden iframe)
+  let isSubmitting = false;
+  if (confirmBtn) {
+    confirmBtn.addEventListener('click', () => {
+      // Quick required check (optional; native validation won’t run on unchecked boxes)
+      const required = [
+        'Role','StudentInitial','StudentID','StudentStatus','TeacherName','TeacherEmail',
+        'ParentNotified','MainConcern','AdditionalConcern','Observation',
+        'FBA','BehaviorData','BehaviorTime','BehaviorSubject'
+      ];
+      const fd = new FormData(form);
+      for (const f of required) {
+        if (!fd.get(f)) {
+          alert(`Missing required field: ${f}`);
+          return;
+        }
+      }
 
-
-    const resultText = await response.text();
-    console.log("Raw Server Response:", resultText);
-
-    let result;
-    try {
-      result = JSON.parse(resultText);
-    } catch {
-      throw new Error("Invalid JSON returned from server.");
-    }
-
-    alert(result.message || "Form submitted successfully.");
-    document.getElementById("BhtForm").reset();
-    document.getElementById("previewSection").style.display = "none";
-  } catch (err) {
-    console.error("Submit Error:", err);
-    alert("There was an error submitting the form.");
-  }
-});
-
-// Save Preview as PDF
-document.getElementById("savePdfBtn").addEventListener("click", async function () {
-  const preview = document.getElementById("previewSection");
-
-  if (!preview || preview.style.display === "none") {
-    alert("Preview must be visible to save as PDF.");
-    return;
+      isSubmitting = true;
+      confirmBtn.disabled = true;
+      // requestSubmit runs built-in validation if you use "required" on inputs
+      // form.submit() skips native validation; either is fine here
+      form.requestSubmit();
+    });
   }
 
-  const { jsPDF } = window.jspdf;
-  const pdf = new jsPDF({ orientation: "portrait", unit: "pt", format: "a4" });
+  // Detect Apps Script response (cross-origin iframes still fire load)
+  if (iframe) {
+    iframe.addEventListener('load', () => {
+      if (!isSubmitting) return; // ignore first load
+      isSubmitting = false;
+      confirmBtn && (confirmBtn.disabled = false);
 
-  await html2canvas(preview).then(canvas => {
-    const imgData = canvas.toDataURL("image/png");
-    const imgProps = pdf.getImageProperties(imgData);
-    const pdfWidth = pdf.internal.pageSize.getWidth();
-    const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
+      alert('Form submitted to Google Sheets!');
+      form.reset();
+      previewSection && (previewSection.style.display = 'none');
+      // reset counter
+      if (observationCounter) observationCounter.textContent = '0 / 5000';
+    });
+  }
 
-    pdf.addImage(imgData, "PNG", 20, 20, pdfWidth - 40, pdfHeight);
-    pdf.save("submission-preview.pdf");
-  });
+  // RESET
+  if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+      form.reset();
+      previewSection && (previewSection.style.display = 'none');
+      if (observationCounter) observationCounter.textContent = '0 / 5000';
+    });
+  }
+
+  // Save Preview as PDF
+  const savePdfBtn = document.getElementById('savePdfBtn');
+  if (savePdfBtn) {
+    savePdfBtn.addEventListener('click', async () => {
+      if (!previewSection || previewSection.style.display === 'none') {
+        alert('Preview must be visible to save as PDF.');
+        return;
+      }
+      const { jsPDF } = window.jspdf;
+      const pdf = new jsPDF({ orientation: 'portrait', unit: 'pt', format: 'a4' });
+      const canvas = await html2canvas(previewSection);
+      const img = canvas.toDataURL('image/png');
+      const props = pdf.getImageProperties(img);
+      const w = pdf.internal.pageSize.getWidth();
+      const h = (props.height * w) / props.width;
+      pdf.addImage(img, 'PNG', 20, 20, w - 40, h);
+      pdf.save('bht-preview.pdf');
+    });
+  }
 });

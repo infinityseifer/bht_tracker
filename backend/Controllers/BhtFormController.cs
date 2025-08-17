@@ -16,18 +16,26 @@ namespace backend.Controllers
             _context = context;
         }
 
+        // POST: api/BhtForm
         [HttpPost]
         public async Task<IActionResult> SubmitForm([FromBody] BhtForm form)
         {
-            _context.BhtForms.Add(form);  // ✅ Use plural
+            if (!ModelState.IsValid)
+                return BadRequest(ModelState);
+
+            // NOTE: If your EF model stores List<string> directly, ensure
+            // you've configured value converters or JSON column types in AppDbContext.
+            _context.BhtForms.Add(form);
             await _context.SaveChangesAsync();
-            return Ok(new { message = "Discipline Referral Form saved", id = form.Id });
+
+            return Ok(new { message = "BHT referral saved", id = form.Id });
         }
 
+        // GET: api/BhtForm
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BhtForm>>> GetForms()
         {
-            return await _context.BhtForms.ToListAsync();  // ✅ Use plural
+            return await _context.BhtForms.AsNoTracking().ToListAsync();
         }
     }
 }
