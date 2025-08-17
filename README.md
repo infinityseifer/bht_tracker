@@ -34,4 +34,23 @@
 ---
 
 ## 📂 Project Structure
+v1.2
+A lightweight, school-facing web app to collect, preview, and store student behavior data via two forms:
 
+Discipline Referral Form (dr-form.html)
+
+BHT Referral Form (bht-form.html)
+
+Users can preview entries, save previews as PDF, and submit directly to Google Sheets (no server/database needed for v1.2). A legacy .NET + MySQL path is included but optional.
+
+What’s in v1.2
+
+✅ Google Sheets integration (Apps Script) for both forms
+
+✅ No-CORS submission using native HTML form posts (hidden iframe pattern)
+
+✅ Consistent UI between DR & BHT forms (aligned checkboxes, larger labels where needed)
+
+✅ Preview Before Submit + Save Preview as PDF (html2canvas + jsPDF)
+
+🧪 (Planned) Auto EDA for CSV uploads (coming next)

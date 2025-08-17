@@ -18,7 +18,7 @@ document.addEventListener('DOMContentLoaded', () => {
       observationCounter.textContent = `${observationField.value.length} / 5000`;
     });
   }
-
+ 
   // PREVIEW
   if (previewBtn && previewSection && previewContent) {
     previewBtn.addEventListener('click', () => {

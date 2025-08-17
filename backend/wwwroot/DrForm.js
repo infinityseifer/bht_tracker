@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
       counter.textContent = `${narrative.value.length} / 2500`;
     });
   }
-
+ 
   // Preview
   if (previewBtn) {
     previewBtn.addEventListener('click', () => {

@@ -178,3 +178,47 @@ form textarea {
 .preview-buttons button {
   flex: none;
 }
+  /* Neat 2-column checkbox grid */
+  /* Applies to every checkbox section that uses .checkbox-columns */
+.checkbox-columns {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(300px, 1fr));
+  gap: 10px 20px;
+}
+
+/* Make each checkbox + text sit side-by-side, neatly */
+.checkbox-columns label {
+  display: inline-flex;     /* put checkbox + text on one line */
+  align-items: center;      /* vertical alignment */
+  font-size: 18px;          /* larger label text for all checkbox groups */
+  line-height: 1.3;
+  margin: 0;
+}
+
+/* Space between the checkbox and the text (works even if there's no <span>) */
+.checkbox-columns label > input[type="checkbox"] {
+  margin: 0 8px 0 0;        /* small gap to the right of the box */
+}
+
+/* If you DO wrap text in a <span>, keep it tidy */
+.checkbox-columns label > span {
+  white-space: normal;
+  word-break: break-word;
+}
+
+/* Override any previous "fixed width" checkbox rule */
+.checkbox-columns input[type="checkbox"] {
+  flex: none;               /* don’t force extra width */
+  width: auto;
+  height: 1.1em;            /* optional: visually align with text size */
+}
+
+/* Hide old <br> separators if any remain in markup */
+.checkbox-columns br { display: none; }
+
+/* Optional: stack to a single column on small screens */
+@media (max-width: 600px) {
+  .checkbox-columns {
+    grid-template-columns: 1fr;
+  }
+}
